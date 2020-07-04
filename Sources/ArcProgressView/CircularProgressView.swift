@@ -80,7 +80,7 @@ public class CircularProgressView: UIView {
         addDoubleTapGestureInThumb()
     }
     
-    override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         super.draw(rect)
         drawArcPath(rect: frame)
         
@@ -215,7 +215,7 @@ public extension CircularProgressView {
         case leftUp
         case leftDown
         
-        init(dx: CGFloat, dy: CGFloat) {
+        public init(dx: CGFloat, dy: CGFloat) {
             if dy > 0 && dx > 0 {
                 self = .rightDown
             } else if dy > 0 && dx < 0 {
@@ -227,7 +227,7 @@ public extension CircularProgressView {
             }
         }
         
-        var isInDownSide: Bool {
+        public var isInDownSide: Bool {
             switch self {
             case .rightDown, .leftDown: return true
             default: return false
@@ -236,7 +236,7 @@ public extension CircularProgressView {
     }
 }
 
-extension CircularProgressView {
+public extension CircularProgressView {
     
     struct ArcLimits: Equatable {
         private(set) var startPoint: CGPoint
@@ -245,11 +245,11 @@ extension CircularProgressView {
         private(set) var leftBoundsRange: ClosedRange<Double> = 0...0
         private(set) var rightBoundsRange: ClosedRange<Double> = 0...0
         
-        static var `default`: Self {
+        public static var `default`: Self {
             .init(startPoint: .zero, endPoint: .zero)
         }
         
-        mutating func setupVaues<T: BinaryFloatingPoint>(_ center: CGPoint, radius: T, startAngle: T, endAngle: T) {
+        public mutating func setupVaues<T: BinaryFloatingPoint>(_ center: CGPoint, radius: T, startAngle: T, endAngle: T) {
             startPoint = CGPoint.pointOnCircle(center: center, radius: CGFloat(radius), angle: Double(startAngle).toRadians())
             endPoint   = CGPoint.pointOnCircle(center: center, radius: CGFloat(radius), angle: Double(endAngle).toRadians())
             
@@ -262,7 +262,7 @@ extension CircularProgressView {
         let start: CGFloat
         let end: CGFloat
         
-        static var `default`: Self {
+        public static var `default`: Self {
             .init(start: 0, end: 0)
         }
     }
@@ -280,7 +280,7 @@ public extension CircularProgressView {
         let startAngle: CGFloat
         let endAngle: CGFloat
         
-        static var `default`: Self {
+        public static var `default`: Self {
             .init(
                 fillColor: .clear,
                 strokeColor: .gray,
