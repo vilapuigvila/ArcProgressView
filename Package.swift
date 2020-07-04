@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "ArcProgressView",
+    platforms: [
+       .macOS(.v10_13), .iOS(.v12),
+    ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -20,9 +23,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "ArcProgressView",
-            dependencies: []),
-        .testTarget(
-            name: "ArcProgressViewTests",
-            dependencies: ["ArcProgressView"]),
+            dependencies: [])
+//        .testTarget(
+//            name: "ArcProgressViewTests",
+//            dependencies: ["ArcProgressView"]),
     ]
 )
