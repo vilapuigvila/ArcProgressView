@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol CircularProgressViewDelegate: AnyObject {
+public protocol CircularProgressViewDelegate: AnyObject {
     func circularProgressView(_ view: CircularProgressView, thumbValue: Double)
 }
 
-final class CircularProgressView: UIView {
+public class CircularProgressView: UIView {
     
     private(set) lazy var thumbView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: configuration.thumbRadius, height: configuration.thumbRadius))
@@ -47,16 +47,16 @@ final class CircularProgressView: UIView {
         
     // MARK: - Public var -
     /// delegate
-    weak var delegate: CircularProgressViewDelegate?
+    public weak var delegate: CircularProgressViewDelegate?
     
     /// set initial thumb position, by default at center angle
-    var initialThumbPosition: Double = 0.5
+    public var initialThumbPosition: Double = 0.5
     
     /// set start angle in degrees
-    lazy var startAngle: CGFloat = configuration.startAngle
+    public lazy var startAngle: CGFloat = configuration.startAngle
     
     /// set end angle in degress
-    lazy var endAngle: CGFloat = configuration.endAngle
+    public lazy var endAngle: CGFloat = configuration.endAngle
 
     @available(iOS 10.0, *)
     private lazy var impact: UIImpactFeedbackGenerator = {
@@ -70,7 +70,7 @@ final class CircularProgressView: UIView {
     required init?(coder: NSCoder) { fatalError() }
     
     // MARK: - Life Cycle -
-    init(frame: CGRect, configuration: Configuration = .default) {
+    public init(frame: CGRect, configuration: Configuration = .default) {
         assert(frame.width == frame.height, "only allow square views")
         
         self.configuration = configuration
