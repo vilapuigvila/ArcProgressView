@@ -207,7 +207,7 @@ public class CircularProgressView: UIView {
 }
 
 // MARK: - Helper's -
-private extension CircularProgressView {
+public extension CircularProgressView {
     
     enum TouchInCircle {
         case rightUp
@@ -268,7 +268,7 @@ extension CircularProgressView {
     }
 }
 
-extension CircularProgressView {
+public extension CircularProgressView {
     struct Configuration {
         let fillColor: UIColor
         let strokeColor: UIColor
@@ -291,16 +291,5 @@ extension CircularProgressView {
                 endAngle: CGFloat(45)
             )
         }
-    }
-}
-
-extension UIFont {
-    func calculateHeight(text: String, width: CGFloat) -> CGFloat {
-        let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let boundingBox = text.boundingRect(with: constraintRect,
-                                        options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                                        attributes: [NSAttributedString.Key.font: self],
-                                        context: nil)
-        return boundingBox.height
     }
 }
