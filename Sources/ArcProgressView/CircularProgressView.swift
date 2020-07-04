@@ -111,17 +111,6 @@ public class CircularProgressView: UIView {
         addSubview(thumbView)
     }
     
-    private func addPanGestureInThumb() {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragThumb(recognizer:)))
-        thumbView.addGestureRecognizer(panGesture)
-    }
-    
-    private func addDoubleTapGestureInThumb() {
-        let panGesture = UITapGestureRecognizer(target: self, action: #selector(moveThumbToCenterArc))
-        panGesture.numberOfTapsRequired = 2
-        addGestureRecognizer(panGesture)
-    }
-    
     @objc private func moveThumbToCenterArc() {
         let thumbPosition = Rescale(from: (0, 1), to: (-225, 45)).rescaleAndClamp(initialThumbPosition)
         thumbView.center = pointInArc(angle: thumbPosition)
@@ -159,7 +148,7 @@ public class CircularProgressView: UIView {
         let constraint = Double.pi / 4
         var radians = Double(atan(absDy / dx))
         
-        let quarter = TouchInCircle(dx: dx, dy: dy)
+        let quarter = TouchInArc(dx: dx, dy: dy)
         
         if quarter.isInDownSide {
             radians = min(constraint, max(-constraint, radians))
@@ -190,6 +179,21 @@ public class CircularProgressView: UIView {
     private func pointInArc(angle: Double) -> CGPoint {
         return CGPoint.pointOnCircle(center: viewCenter, radius: radius, angle: angle.toRadians())
     }
+}
+
+// MARK: - Config -
+extension CircularProgressView {
+    
+    private func addPanGestureInThumb() {
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragThumb(recognizer:)))
+        thumbView.addGestureRecognizer(panGesture)
+    }
+    
+    private func addDoubleTapGestureInThumb() {
+        let panGesture = UITapGestureRecognizer(target: self, action: #selector(moveThumbToCenterArc))
+        panGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(panGesture)
+    }
     
     private func setupLabels() {
         let width = frame.width / 3
@@ -203,67 +207,5 @@ public class CircularProgressView: UIView {
         lbRight.frame = CGRect(x: 0, y: 0, width: width, height: fontHeight)
         lbRight.center = CGPoint(x: arcLimits.endPoint.x - 2, y: arcLimits.endPoint.y + offsetY)
         addSubview(lbRight)
-    }
-}
-
-// MARK: - Helper's -
-public extension CircularProgressView {
-    
-    enum TouchInCircle {
-        case rightUp
-        case rightDown
-        case leftUp
-        case leftDown
-        
-        public init(dx: CGFloat, dy: CGFloat) {
-            if dy > 0 && dx > 0 {
-                self = .rightDown
-            } else if dy > 0 && dx < 0 {
-                self = .leftDown
-            } else if dy < 0 && dx > 0 {
-                self = .rightUp
-            } else  {
-                self = .leftUp
-            }
-        }
-        
-        public var isInDownSide: Bool {
-            switch self {
-            case .rightDown, .leftDown: return true
-            default: return false
-            }
-        }
-    }
-}
-
-public extension CircularProgressView {
-    
-    struct ArcLimits: Equatable {
-        private(set) var startPoint: CGPoint
-        private(set) var endPoint: CGPoint
-        
-        private(set) var leftBoundsRange: ClosedRange<Double> = 0...0
-        private(set) var rightBoundsRange: ClosedRange<Double> = 0...0
-        
-        public static var `default`: Self {
-            .init(startPoint: .zero, endPoint: .zero)
-        }
-        
-        public mutating func setupVaues<T: BinaryFloatingPoint>(_ center: CGPoint, radius: T, startAngle: T, endAngle: T) {
-            startPoint = CGPoint.pointOnCircle(center: center, radius: CGFloat(radius), angle: Double(startAngle).toRadians())
-            endPoint   = CGPoint.pointOnCircle(center: center, radius: CGFloat(radius), angle: Double(endAngle).toRadians())
-            
-            leftBoundsRange = Double(startAngle)...0.0
-            rightBoundsRange = -180.0...Double(endAngle)
-        }
-    }
-    
-    struct ArcAngle: Equatable {
-        let start: CGFloat
-        let end: CGFloat
-        
-        public static var `default`: Self {
-            .init(start: 0, end: 0)
-        }
     }
 }
